@@ -1,0 +1,14 @@
+[Unit]
+Description=Run stream.py at startup
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/robot/stream.py
+WorkingDirectory=/home/robot
+Restart=always
+User=robot
+Group=robot
+
+[Install]
+WantedBy=multi-user.target
+

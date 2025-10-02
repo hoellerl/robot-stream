@@ -1,0 +1,113 @@
+DOCUMENTATION STREAMS:
+======================
+
+Disclaimer
+~~~~~~~~~~
+This whole documentation assumes the Raspberry Pi has already everything installed and only describes the on-site setup.
+If this isn't the case, go down and read "Initial Setup".
+
+Raspberry Pi Setup
+~~~~~~~~~~~~~~~~~~
+When the Robot network is running power the raspberry pis by plugging them in. The stream should automatically start.
+Run nmap to find the Raspberry Pis IPs. To be extra clear, you have to be in the same network as the Raspis (probably the Robot one).
+A portable Windows version of nmap is on the drive. More info and how to install if it's not present can be read further down in the nmap section.
+Run the following:
+./nmap.exe -sP <REPLACE THIS>
+e.g.: ./nmap.exe -sP 192.168.206.0/24
+Replace the ip address with the IP of the PC in the robot network (e.g. 192.168.206.17 => 192.168.206.0/24) you can get this with ipconfig
+You should be able to identify the Raspberry Pis Ips by having "Raspberry Pi" written next to the MAC address.
+If there are more than two you can recognize the correct Raspberry Pis by these MAC adresses (if you got the same ones as me):
+	- 2C:CF:67:B5:5E:98
+	- D8:3A:DD:44:89:FB
+An example nmap output and how to find the ip in there is at the very bottom of this document.
+On both of those ips on port 8000 there is a site hosted with a stream (e.g. http://192.168.206.183:8000/index.html)
+
+Note: If the Raspberry Pi shows up in the output but nothing is hosted check the case, if the camera module once again
+disassembled itself. If this is actually the case, you just have to stick it back on. Else see the "Config and Troubleshooting" section.
+
+Streaming Overview
+~~~~~~~~~~~~~~~~~~
+Run the run.exe in a folder together with the index.html, this will start a webserver on the port 8000 
+If it has the permission it will host it to the Robot network else it should just be available under localhost:8000
+You can configure the streaming urls in the settings icon the top right corner. 
+Just set it to the ips of the raspis linking to the stream. (e.g. http://192.168.206.183:8000/stream.mjpg)
+
+Raspberry Pi Config and Troubleshooting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If modification (e.g. different resolution, fps etc.) is needed, ssh into the rapsis (you should know the ips from nmap)
+The user is robot and the password is the same as for the network.
+Most problems should be fixed by just restarting the service: "sudo systemctl restart robotStream.service"
+Possibly you need to reconnect to the WiFi (or switch to higher prio WiFi, like hotspot), this is done by: "sudo wpa_cli -i wlan0 reconfigure"
+or "sudo systemctl restart wpa_supplicant" (I'm not sure anymore, it's been a while since I developed and used it).
+If the Raspberry Pi hasn't been factory reset between uses, there might still be a HOW_TO_USE.txt in the home dir which describes everything in higher detail.
+
+
+FILES ON THIS FLASHDRIVE:
+=========================
+
+run.exe - hosting webserver
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Executing the run.exe starts hosting a webserver in the local network on the port 8000 with the contents of the current directory.
+Originally a python script (see run.py) converted to an exe so it can run on a Windows PC without installing any dependencies.
+
+index.html - stream overview
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Stream urls can be changed in the settings in the upper right corner of the page (or if really neccassary hardcoded in the js)
+index-no-settings.html is the whole page without any js and hardcoded stream urls, use only if needed (its in the "other" dir)
+
+nmap directory - portable nmap version
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A portable nmap install for setup. You might be better off installing it yourself since the drive is pretty slow.
+If you see this on GitHub an not on the flashdrive, you'll have to install it yourself.
+The exact same installation as on the drive can be found here: https://nmap.org/dist/nmap-7.92-win32.zip
+Other versions or installs for different operating systems can be found on their website too (https://nmap.org/)
+
+
+OTHER STUFF FOR TROUBLESHOOTING AND DEBUGGING ("other" directory)
+
+this is usually not needed but I still included it in the rare case it might come in handy.
+
+simulate.py - simulate a stream
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+simulates a stream, like the raspis would produce; port can be changed with --port <port>
+
+stream.py - the script on the raspis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+the streaming script for the raspis, only as a backup (or for initial setup)
+
+run.py - the script to the exe
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+the python script that was converted to the run.exe. In case the exe doesnt work you can run this script instead, 
+though you will need python installed
+
+
+INITIAL SETUP:
+==============
+- Create a user "robot" (you might add it to the "video" group for access to the camera to work), I recommend setting the password to the same as the "Robot" network for ease-of-use, though you are free to choose anything.
+- You might need to enable the camera depending on the Raspi version; this is done by executing "sudo raspi-config" and pressing "raspi-config -> Interface Options -> Camera -> Enable"
+- Edit the networks file (etc/wpa_supplicant/wpa_supplicant.conf) and configure the WiFi your Raspberry will be running in, as well as your testing hotspot if you require one.
+	There is a template in the "others" directory, which still needs editing.
+- Upload the stream.py and config.json file to the Raspberry (into /home/robot/)
+- Create a systemctl job that starts the stream script on startup (there is an example in the "others" directory)
+
+Btw, you might have to get creative with attaching the Raspberry Pis onto the Robots (at least I had to, with rubberbands etc.), you can still adjust the camera rotation in the config if needed.
+
+Unfortunately a few files like the HOW_TO_USE.txt were written very spontaneously and are only on the Raspberry Pis.
+So if they've been factory reset in the mean time, they are lost. (I tried to recall all the infos in there and write them in here, but I'm not sure I got everything)
+
+
+
+Example nmap output:
+====================
+
+~> nmap -sP 192.168.252.0/24
+Starting Nmap 7.95 ( https://nmap.org )
+Nmap scan report for 192.168.252.13			<-- THIS IS THE CORRECT IP
+Host is up (0.24s latency).
+MAC Address: 2C:CF:67:B5:5E:98 (Raspberry Pi (Trading)) <-- YOU CAN RECOGNIZE IT BY THIS
+Nmap scan report for 192.168.252.96
+Host is up (0.043s latency).
+MAC Address: 66:39:3F:FE:F9:B4 (Unknown)
+Nmap scan report for 192.168.252.174
+Host is up.
+Nmap done: 256 IP addresses (3 hosts up) scanned in 44.42 seconds

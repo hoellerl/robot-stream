@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streams Display</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .stream-container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+        }
+        .stream {
+            width: 48%;
+        }
+        img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="stream-container">
+        <div class="stream">
+            <img src="http://192.168.217.183:8000/stream.mjpg" alt="Stream 1" />
+        </div>
+        <div class="stream">
+            <img src="http://192.168.217.13:8000/stream.mjpg" alt="Stream 2" />
+        </div>
+    </div>
+</body>
+</html>

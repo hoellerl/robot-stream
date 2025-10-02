@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streams Display</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+        .stream-container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+        }
+        .stream {
+            width: 48%;
+        }
+        img {
+            width: 100%;
+        }
+        .settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            aspect-ratio: 1;
+            border-radius: 100%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .settings-btn:hover {
+            background-color: #222222;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        .popup input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .popup button {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .popup button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <button class="settings-btn" onclick="openPopup()">⚙️</button>
+
+    <div class="stream-container">
+        <div class="stream">
+            <img id="stream1-img" alt="Stream 1" />
+        </div>
+        <div class="stream">
+            <img id="stream2-img" alt="Stream 2" />
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <h3>Configure Stream URLs</h3>
+            <label for="stream1-src">Stream 1 URL:</label>
+            <input type="text" id="stream1-src" />
+            
+            <label for="stream2-src">Stream 2 URL:</label>
+            <input type="text" id="stream2-src" />
+
+            <button onclick="saveUrls()">Save</button>
+            <button onclick="closePopup()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        function loadUrls() {
+            const stream1Url = localStorage.getItem("stream1-url") || "http://192.168.217.183:8000/stream.mjpg";
+            const stream2Url = localStorage.getItem("stream2-url") || "http://192.168.217.13:8000/stream.mjpg";
+
+            document.getElementById("stream1-img").src = stream1Url;
+            document.getElementById("stream2-img").src = stream2Url;
+
+            document.getElementById("stream1-src").value = stream1Url;
+            document.getElementById("stream2-src").value = stream2Url;
+        }
+
+        function openPopup() {
+            document.getElementById("popup").style.display = "flex";
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+
+        function saveUrls() {
+            const stream1Url = document.getElementById("stream1-src").value;
+            const stream2Url = document.getElementById("stream2-src").value;
+
+            localStorage.setItem("stream1-url", stream1Url);
+            localStorage.setItem("stream2-url", stream2Url);
+
+            document.getElementById("stream1-img").src = stream1Url;
+            document.getElementById("stream2-img").src = stream2Url;
+            closePopup();
+        }
+
+        window.onload = loadUrls;
+    </script>
+</body>
+</html>
