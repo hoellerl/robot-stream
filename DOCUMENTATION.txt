@@ -58,7 +58,7 @@ index-no-settings.html is the whole page without any js and hardcoded stream url
 nmap directory - portable nmap version
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 A portable nmap install for setup. You might be better off installing it yourself since the drive is pretty slow.
-If you see this on GitHub an not on the flashdrive, you'll have to install it yourself.
+If you see this on GitHub and not on the flashdrive, you'll have to install it yourself.
 The exact same installation as on the drive can be found here: https://nmap.org/dist/nmap-7.92-win32.zip
 Other versions or installs for different operating systems can be found on their website too (https://nmap.org/)
 
@@ -70,15 +70,16 @@ this is usually not needed but I still included it in the rare case it might com
 simulate.py - simulate a stream
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 simulates a stream, like the raspis would produce; port can be changed with --port <port>
+Was used for developing the frontend (index.html) when I didn't have the Raspberry Pis.
 
-stream.py - the script on the raspis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-the streaming script for the raspis, only as a backup (or for initial setup)
+stream.py, config.json, robotStream.service, wpa_supplicant.conf - neccassary files for setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The streaming script, config file, systemctl config, and network config. For initial setup and as backup.
 
 run.py - the script to the exe
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 the python script that was converted to the run.exe. In case the exe doesnt work you can run this script instead, 
-though you will need python installed
+though you will need python installed.
 
 
 INITIAL SETUP:
